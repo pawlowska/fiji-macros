@@ -1,12 +1,12 @@
 //file parameters
 suffix = ".ome.tif";
-saving="tif";
+saving="series";
 /////////////////////////////////////////////////////////////////////
 print("\\Clear");
 input = getDirectory("Input directory containing raw data");
 //output_subset=Basic_create_subset(input, 5, 10);
 
-output_subset = input+"imageSeries_subset/";
+//output_subset = input+"imageSeries_subset/";
 //Basic_bckg_from_subset(output_subset, "flat_subset.tif", "dark_subset.tif");
 
 Basic_correct(input, "flat_subset.tif", "dark_subset.tif", saving);
@@ -110,8 +110,11 @@ function processFolder_convertUsingFiles(input, output, flat_file, dark_file, sa
 
 	for (i = 0; i < list.length; i++) {
 		if((endsWith(list[i], suffix))&&(endsWith(list[i], bigfile+suffix))!=1) {
+			print(list[i]);
 			
 			ileplikow++;
+			//namestring=substring(list[i], 0, indexOf(list[i], "tp"));
+			//indx=substring(list[i], indexOf(list[i], "_ch_0")+4, indexOf(list[i], suffix));
 			namestring=substring(list[i], 0, indexOf(list[i], "MMStack"));
 			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], suffix));
 			
@@ -122,7 +125,7 @@ function processFolder_convertUsingFiles(input, output, flat_file, dark_file, sa
 			//save
 			print("Correction done, saving...");
 			if (saving=='series') {
-				processFile_save_toseries(corrected_name, output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx+"_");
+				processFile_save_toseries(corrected_name, output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx+"_",0);
 			} else if (saving=='tif') {
 				processFile_save_totif(corrected_name, output, namestring+"Pos"+indx);
 			} else
@@ -166,11 +169,14 @@ function processFile_correct(input_file, remove, n_remove, flat_file, dark_file)
 }
 
 
-function processFile_save_toseries(input_image, output_subdir, output_file) {
+function processFile_save_toseries(input_image, output_subdir, output_file, start_indx) {
 	//save corrected file
 	createFolder(output_subdir);
 	selectWindow(input_image);
-   	params_saving = "format=TIFF name="+output_file+" start="+start_indx+" "+"save=["+output_subdir+output_file+".tif]";
+   	params_saving = "format=TIFF name="+output_file+
+   					" start="+start_indx+
+   					" save=["+output_subdir+output_file+".tif]";
+   	print(params_saving);
    	run("Image Sequence... ", params_saving); 
    	close();
 
