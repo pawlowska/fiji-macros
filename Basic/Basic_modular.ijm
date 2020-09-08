@@ -75,6 +75,7 @@ function processFolder_subset(input, output, first_d, inc_d) {
 	createFolder(output);
 
 	for (i = 0; i < list.length; i++) {
+		showProgress(i, list.length);
 		if(endsWith(list[i], suffix)) 
 			processFile_subset(input+list[i], output+"/", substring(list[i], 0, indexOf(list[i], suffix))+'_',
 			first_d, inc_d);
