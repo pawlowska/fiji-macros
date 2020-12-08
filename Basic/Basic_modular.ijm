@@ -1,6 +1,6 @@
 //file parameters
 suffix = ".ome.tif";
-saving="series";
+saving="series"; //'series' or 'tif'
 /////////////////////////////////////////////////////////////////////
 print("\\Clear");
 input = getDirectory("Input directory containing raw data");
