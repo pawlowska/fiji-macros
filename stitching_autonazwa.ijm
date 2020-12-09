@@ -1,3 +1,6 @@
+//quick stitching using Plugins-> Stitching -> Grid/Collection...
+
+
 ////////////////////TODO
 /*
  * w ogóle sizes jak nie ma 
@@ -14,7 +17,6 @@ suffix = ".ome.tif";
 l_suffix=lengthOf(suffix);
 suff_ii="{ii}";
 number_ii=lengthOf(suff_ii)-2;
-ileplikow = 0;
 
 nazwa = processFolder(input);
 print("Znaleziono plikow: "+ileplikow)
