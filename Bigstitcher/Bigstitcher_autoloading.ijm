@@ -13,13 +13,14 @@ while(!(endsWith(list[i], 'tif')))
 if(endsWith(list[i], 'ome.tif')) {
 	print("ome tiff");
 	filetype_string=ometif_string;
-} else if(endsWith(list[i], '0.tif')) {
+} else if(endsWith(list[i], '.tif')) {
 	print("tif");
 	filetype_string=tif_string;
 } else {
 	print(list[i]);
 }
 
+print(filetype_string);
 
 new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename=dataset.xml "+
 	"path="+pth+
