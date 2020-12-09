@@ -1,7 +1,7 @@
 setBatchMode( true );
 
 remove = false;
-process=true;
+process=false;
 n_remove = 2;
 bckg_radius=100;
 
@@ -13,7 +13,7 @@ if (File.exists(output)!=1) {
 }
 //output = getDirectory("Output directory");
 
-suffix = ".tif";
+suffix = ".ome.tif";
 
 processFolder(input);
 
