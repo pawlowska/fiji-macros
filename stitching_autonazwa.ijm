@@ -1,23 +1,21 @@
 //quick stitching using Plugins-> Stitching -> Grid/Collection...
+//USE WITH TIF FILES
+//USE OMETOTIFF_WITH_STITCHING FOR .ome.tif
 
-
-////////////////////TODO
-/*
+/* TODO
 sprawdzić różny blending
+Result of getSizes: µm 1.4501 1.4501 8
 */
 
 input = getDirectory("Input directory");
 
-overlap=5;
+overlap=20;
 
-//suffix = ".tif";
-//suffix = "_1.tif"
-suffix = ".ome.tif";
-l_suffix=lengthOf(suffix);
+suffix = ".tif";
 suff_ii="{ii}";
 number_ii=lengthOf(suff_ii)-2;
 
-list = getFileList(input);
+list=getFileList(input);
 list = Array.delete(list, 'DisplaySettings.json'); 
 print("Znaleziono plikow: "+list.length)
 
@@ -25,6 +23,7 @@ nazwa = processFolderFindFilename(list);
 
 v = newArray(0,0,0);
 v = getSizes(list);
+unit="µm";
 
 Dialog.create("Number of tiles");
 Dialog.addString("x= ", "1", 2);
@@ -48,9 +47,9 @@ else {
 	file_names = " file_names="+nazwaPliku+suffix;
 	dir=" directory="+input;
 	//rest=" output_textfile_name=TileConfig.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 compute_overlap display_fusion computation_parameters=[Save memory (but be slower)] image_output=[Fuse and display]";
-	//rest_old=" output_textfile_name=TileConfig.txt fusion_method=[Max. Intensity] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 compute_overlap display_fusion use_virtual_input_images";
+	
 	rest_virtual=" output_textfile_name=TileConfig.txt fusion_method=[Max. Intensity] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 compute_overlap display_fusion use_virtual_input_images";	
-	params = type+grid_size+" tile_overlap="+overlap+" first_file_index_i=2"+dir+file_names+rest_virtual;
+	params = type+grid_size+" tile_overlap="+overlap+" first_file_index_i=0"+dir+file_names+rest_virtual;
 	run("Grid/Collection stitching", params);
 	setVoxelSize(v[0], v[1], v[2], unit);
 }
