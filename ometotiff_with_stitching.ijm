@@ -1,11 +1,11 @@
 setBatchMode( true );
 
 //parametry_konwersji
-remove = true;
+remove = false;
 n_remove = 1;
 
 //parametry_stitchingu
-overlap=5;
+overlap=20;
 
 //start_script
 input = getDirectory("Input directory");
@@ -15,6 +15,7 @@ if (File.exists(output)!=1) {
 	File.makeDirectory(output);
 }
 
+//open dialog to let user ddefine the grid
 Dialog.create("Number of tiles");
 Dialog.addString("x= ", "1", 2);
 Dialog.addString("y= ", "2", 2);
@@ -26,19 +27,18 @@ yInt=parseInt(y);
 ile=xInt*yInt;
 
 //ome to tif
-suffix = ".ome.tif";
-processFolderOmetotiff(input);
+suffix_raw = ".ome.tif";
+processFolderOmetotiff(input, suffix_raw);
 
-//stitching
+//prepare stitching
 suffix = ".tif";
-l_suffix=lengthOf(suffix);
 suff_ii="{ii}";
 number_ii=lengthOf(suff_ii)-2;
 ileplikow = 0;
 
 input=output;
 
-nazwa = processFolderCountfiles(input);
+nazwa = processFolderCountfiles(input, suffix);
 print("Znaleziono plikow: "+ileplikow);
 
 if(ile>ileplikow)
@@ -94,18 +94,18 @@ function parseNameString(namestring) {
 	print(valY);
 }
 
-function processFolderOmetotiff(input) {
+function processFolderOmetotiff(input, suffix_in) {
 	list = getFileList(input);
 	ileplikow = 0;
-	print("Przetwarzam katalog "+input);
+	//print("Przetwarzam katalog "+input);
 	folderstring=substring(input,0,lengthOf(input)-1);
 	folderstring=substring(folderstring, lastIndexOf(folderstring, "\\")+1, lengthOf(folderstring));
 
 	for (i = 0; i < list.length; i++) {
-		if(endsWith(list[i], suffix)) {
+		if(endsWith(list[i], suffix_in)) {
 			ileplikow++;
 			namestring=substring(list[i], 0, indexOf(list[i], "MMStack"));
-			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], ".ome"));
+			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], suffix_in));
 			print(indx);
 			processFileOmetotiff(input+list[i], output+namestring+indx+".tif");
 		}
@@ -116,7 +116,6 @@ function processFolderOmetotiff(input) {
 
 function processFileOmetotiff(input_file, output_file) {
 	// do the processing here 
-	print("Przetwarzam plik: " + input_file);
 	
    	open(input_file);
    	if(remove) {
@@ -129,7 +128,7 @@ function processFileOmetotiff(input_file, output_file) {
    	print("");
 }
 
-function processFolderCountfiles(input) {
+function processFolderCountfiles(input, suffix) {
 	list = getFileList(input);
 	brak_nazwy=1;
 	for (i = 0; i < list.length; i++) {
@@ -147,7 +146,7 @@ function processFolderCountfiles(input) {
 function getSizes(input) {
 	list = getFileList(input);
 	print("Trying to find dimensions of: "+input+list[0]);
-	open(input+list[0]);
+	open(input+list[0], "virtual");
 	vw=0;
 	vh=0;
 	vd=0;
