@@ -4,6 +4,7 @@
  *  -tif stacks
  * 
  *  requires only selecting input directory
+ *  data will be resaved as HDF5 ready to open in Bigstitcher and stitch
  */
 
 pth=getDirectory("Input directory");
