@@ -1,3 +1,11 @@
+/* LOADS DATA INTO BIGSTITCHER
+ *  works for:
+ *  -raw data straight from MM if no missing tiles etc
+ *  -tif stacks
+ * 
+ *  requires only selecting input directory
+ */
+
 pth=getDirectory("Input directory");
 print(pth);
 
@@ -11,16 +19,14 @@ while(!(endsWith(list[i], 'tif')))
 	{i=i+1;};
 
 if(endsWith(list[i], 'ome.tif')) {
-	print("ome tiff");
+	print("found format: ome tiff");
 	filetype_string=ometif_string;
 } else if(endsWith(list[i], '.tif')) {
-	print("tif");
+	print("found format: tif");
 	filetype_string=tif_string;
 } else {
 	print(list[i]);
 }
-
-print(filetype_string);
 
 new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename=dataset.xml "+
 	"path="+pth+
