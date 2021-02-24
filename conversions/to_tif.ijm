@@ -1,3 +1,8 @@
+/* author MP
+ * flexible script converting ome.tiff to ordinary tif or tif series
+ * stacks larger than 4GB are merged
+ */
+
 setBatchMode( true );
 
 //convert to stacks or series?
@@ -80,6 +85,6 @@ function processFile(input_file, output_subdir, output_file){
 		
 	close();
 	
-   	print("Zapisano: " + output_file);
+   	print("Saved: " + output_file);
    	print("");
 }
