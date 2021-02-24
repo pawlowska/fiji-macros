@@ -8,7 +8,7 @@ setBatchMode( true );
 //convert to stacks or series?
 series=false;
 
-//remove first slices?
+//remove first slices of stack?
 remove = true;
 n_remove = 2;
 
@@ -16,16 +16,18 @@ n_remove = 2;
 suffix = ".ome.tif";
 start_indx="0";
 
-//input&output directory
+//PRESS RUN
+
+/////////////////////////////////////////////////////////
 input = getDirectory("Input directory");
 
 if(series) {
 	output = input+"imageSeries/";
 } else{
-	output = input+"/tifs/";
+	output = input+"tifs/";
 }
 if (File.exists(output)!=1) {
-	print("Tworzę folder: " + output);
+	print("Creating: " + output);
 	File.makeDirectory(output);
 }
 
@@ -37,7 +39,6 @@ function processFolder(input, series) {
 	list = getFileList(input);
 	ileplikow = 0;
 	bigfile="_1";
-	print("Przetwarzam katalog "+input);
 
 	for (i = 0; i < list.length; i++) {
 		if((endsWith(list[i], suffix))&&(endsWith(list[i], bigfile+suffix))!=1) {
@@ -45,13 +46,13 @@ function processFolder(input, series) {
 			namestring=substring(list[i], 0, indexOf(list[i], "MMStack"));
 			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], suffix));
 			print(indx);
-			processFile(input+list[i], output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx+"_");
+			processFile(input+list[i], output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx, series);
 		}
 	}
 	print("Koniec "+ input + " ! Przetworzono plikow "+ileplikow);
 }
 
-function processFile(input_file, output_subdir, output_file){
+function processFile(input_file, output_subdir, output_file, series){
 	print("Now processing: " + input_file);
 	
    	open(input_file);
@@ -79,7 +80,6 @@ function processFile(input_file, output_subdir, output_file){
 		params = "format=TIFF name="+output_file+" start="+start_indx+" "+"save=["+output_subdir+output_file+".tif]";
    		run("Image Sequence... ", params); 
 	} else {
-		print("not series");
 		saveAs("Tiff", output+output_file);
 	}
 		
