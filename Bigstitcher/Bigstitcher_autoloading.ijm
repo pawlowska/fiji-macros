@@ -29,7 +29,7 @@ if(endsWith(list[i], 'ome.tif')) {
 	print(list[i]);
 }
 
-new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename=dataset.xml "+
+new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename=dystrofia.xml "+
 	"path="+pth+
 	" exclude=10 "+filetype_string+" how_to_load_images=[Re-save as multiresolution HDF5] "+
 	"dataset_save_path="+pth+
