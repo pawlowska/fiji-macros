@@ -1,6 +1,9 @@
-/* author MP
+/* OME TO TIF CONVERSION OF RAW DATA
  * flexible script converting ome.tiff to ordinary tif or tif series
  * stacks larger than 4GB are merged
+ * 
+ * author: MP
+*
  */
 
 setBatchMode( true );
