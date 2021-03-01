@@ -7,6 +7,8 @@
  *  data will be resaved as HDF5 ready to open in Bigstitcher and stitch
  */
 
+prefix_l=3;
+
 pth=getDirectory("Input directory");
 print(pth);
 
@@ -22,6 +24,7 @@ while(!(endsWith(list[i], 'tif')))
 if(endsWith(list[i], 'ome.tif')) {
 	print("found format: ome tiff");
 	filetype_string=ometif_string;
+	
 } else if(endsWith(list[i], '.tif')) {
 	print("found format: tif");
 	filetype_string=tif_string;
@@ -29,12 +32,15 @@ if(endsWith(list[i], 'ome.tif')) {
 	print(list[i]);
 }
 
-new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename=dystrofia.xml "+
+prefix=substring(list[i], 0, prefix_l);
+print(prefix);
+
+new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename="+prefix+".xml "+
 	"path="+pth+
 	" exclude=10 "+filetype_string+" how_to_load_images=[Re-save as multiresolution HDF5] "+
 	"dataset_save_path="+pth+
-	" check_stack_sizes timepoints_per_partition=1 setups_per_partition=0 use_deflate_compression "+
-	"export_path="+pth+"dataset";
+	//" check_stack_sizes timepoints_per_partition=1 setups_per_partition=0 use_deflate_compression "+
+	"export_path="+pth+prefix+"dataset";
 
 
 run("BigStitcher", new_dataset_automatic_settings);
