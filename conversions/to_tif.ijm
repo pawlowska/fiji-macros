@@ -6,28 +6,27 @@
 *
  */
 
-setBatchMode( true );
+//PRESS RUN
 
-//convert to stacks or series?
-series=false;
+print("\\Clear")
+#@ File (label = "Input directory", style = "directory") input
+#@ String (label = "File suffix", value = ".ome.tif") suffix
+#@ String (label = "Starting index", value = "0") start_indx
+#@ Boolean (label = "Save as series?", value = false) series
+
+roi=true;
 
 //remove first slices of stack?
 remove = true;
 n_remove = 2;
 
-//input file suffix and index
-suffix = ".ome.tif";
-start_indx="0";
-
-//PRESS RUN
-
 /////////////////////////////////////////////////////////
-input = getDirectory("Input directory");
+setBatchMode( true );
 
 if(series) {
-	output = input+"imageSeries/";
+	output = input+"/imageSeries/";
 } else{
-	output = input+"tifs/";
+	output = input+"/tifs/";
 }
 if (File.exists(output)!=1) {
 	print("Creating: " + output);
@@ -49,7 +48,7 @@ function processFolder(input, series) {
 			namestring=substring(list[i], 0, indexOf(list[i], "MMStack"));
 			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], suffix));
 			print(indx);
-			processFile(input+list[i], output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx, series);
+			processFile(input+ File.separator +list[i], output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx, series);
 		}
 	}
 	print("Koniec "+ input + " ! Przetworzono plikow "+ileplikow);
@@ -62,6 +61,12 @@ function processFile(input_file, output_subdir, output_file, series){
 
    	if(remove) {
    		run("Slice Remover", "first=1 last=n_remove increment=1");
+   	}
+
+   	if(roi) {
+   		makeRectangle(10, 10, 100, 100);
+		run("Specify...", "width=2410 height=2630 x=280 y=170 scaled");
+		run("Crop");
    	}
 
 	//concatenate tiff with the "_1" file
