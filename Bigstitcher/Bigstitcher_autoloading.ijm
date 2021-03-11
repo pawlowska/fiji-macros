@@ -7,8 +7,12 @@
  *  data will be resaved as HDF5 ready to open in Bigstitcher and stitch
  */
 
+//this will be used to create file name of the xml
 prefix_l=3;
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 pth=getDirectory("Input directory");
 print(pth);
 
@@ -33,7 +37,6 @@ if(endsWith(list[i], 'ome.tif')) {
 }
 
 prefix=substring(list[i], 0, prefix_l);
-print(prefix);
 
 new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (Bioformats based)] project_filename="+prefix+".xml "+
 	"path="+pth+
@@ -43,6 +46,4 @@ new_dataset_automatic_settings="select=define define_dataset=[Automatic Loader (
 	"export_path="+pth+prefix+"dataset";
 
 
-run("BigStitcher", new_dataset_automatic_settings);
-
-
+run("BigStitcher", new_dataset_automatic_settings);
