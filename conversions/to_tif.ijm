@@ -3,7 +3,7 @@
  * stacks larger than 4GB are merged
  * 
  * author: MP
-*
+ *
  */
 
 //PRESS RUN
@@ -13,11 +13,10 @@ print("\\Clear")
 #@ String (label = "File suffix", value = ".ome.tif") suffix
 #@ String (label = "Starting index", value = "0") start_indx
 #@ Boolean (label = "Save as series?", value = false) series
-
-roi=true;
+#@ Boolean (label = "Remove starting slices?", value = false) remove
+#@ Boolean (label = "Apply ROI during coversion?", value = false) roi
 
 //remove first slices of stack?
-remove = true;
 n_remove = 2;
 
 /////////////////////////////////////////////////////////
