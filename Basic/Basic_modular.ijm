@@ -1,13 +1,24 @@
+/* SCRIPT FOR VIGNETTING ("SHADOWS") REMOVAL
+ * uses Basic plugin (must be installed)
+ * input: tif or ome.tif
+ * output: tif stack or series
+ * 
+ * divided in 3 steps:
+ * 1. a subset of data is created
+ * 2. 'flat' and 'dark' files computed
+ * 3. correction done on each original stack
+ */
+
 //file parameters
 suffix = ".ome.tif";
-saving="series"; //'series' or 'tif'
+saving="tif"; //'series' or 'tif'
 /////////////////////////////////////////////////////////////////////
 print("\\Clear");
 input = getDirectory("Input directory containing raw data");
-//output_subset=Basic_create_subset(input, 5, 10);
+output_subset=Basic_create_subset(input, 5, 15);
 
 //output_subset = input+"imageSeries_subset/";
-//Basic_bckg_from_subset(output_subset, "flat_subset.tif", "dark_subset.tif");
+Basic_bckg_from_subset(output_subset, "flat_subset.tif", "dark_subset.tif");
 
 Basic_correct(input, "flat_subset.tif", "dark_subset.tif", saving);
 
