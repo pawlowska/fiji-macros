@@ -13,11 +13,9 @@ print("\\Clear")
 #@ String (label = "File suffix", value = ".ome.tif") suffix
 #@ String (label = "Starting index", value = "0") start_indx
 #@ Boolean (label = "Save as series?", value = false) series
-#@ Boolean (label = "Remove starting slices?", value = false) remove
+#@ Boolean (label = "Remove starting slices?", value = true) remove
+#@ Integer (label = "# slices to remove", value = 2) n_remove
 #@ Boolean (label = "Apply ROI during coversion?", value = false) roi
-
-//remove first slices of stack?
-n_remove = 2;
 
 /////////////////////////////////////////////////////////
 setBatchMode( true );
@@ -59,7 +57,7 @@ function processFile(input_file, output_subdir, output_file, series){
    	open(input_file);
 
    	if(remove) {
-   		run("Slice Remover", "first=1 last=n_remove increment=1");
+   		run("Slice Remover", "first=1 last="+n_remove+" increment=1");
    	}
 
    	if(roi) {
