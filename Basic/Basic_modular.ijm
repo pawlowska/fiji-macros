@@ -20,6 +20,8 @@ print("\\Clear");
 #@ File (label = "Input directory containing raw data", style = "directory") input
 #@ String (label = "File suffix", value = ".ome.tif") suffix //change to multiple choice?
 
+print(input);
+
 output_subset=Basic_create_subset(input, 5, 15);
 
 //output_subset = input+"imageSeries_subset/";
@@ -32,18 +34,16 @@ print("DONE!");
 /////////////////////////////////////////////////////////////////////
 function Basic_create_subset(input, first_d, inc_d) {
 	//create subset
-	output = input+"/imageSeries_subset/";
+	output = input+"\\imageSeries_subset\\";
 	processFolder_subset(input, output, first_d, inc_d);
 	return output; 
 }
 
 function Basic_bckg_from_subset(dir_subset, flat_file, dark_file) {
-	//run Basic
 	setBatchMode(true);
 	print("STEP 2: Initialising BaSiC.....");
 	open(dir_subset);
 	basic_input=File.name;
-	print(basic_input);
 
 	params_basic="processing_stack="+basic_input+
 				" flat-field=None dark-field=None shading_estimation=[Estimate shading profiles] shading_model=[Estimate both flat-field and dark-field] correction_options=[Compute shading only]";
