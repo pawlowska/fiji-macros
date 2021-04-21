@@ -10,11 +10,16 @@
  */
 
 //file parameters
-suffix = ".ome.tif";
 saving="tif"; //'series' or 'tif'
+
+//PRESS RUN
+
 /////////////////////////////////////////////////////////////////////
 print("\\Clear");
-input = getDirectory("Input directory containing raw data");
+
+#@ File (label = "Input directory containing raw data", style = "directory") input
+#@ String (label = "File suffix", value = ".ome.tif") suffix //change to multiple choice?
+
 output_subset=Basic_create_subset(input, 5, 15);
 
 //output_subset = input+"imageSeries_subset/";
@@ -27,7 +32,7 @@ print("DONE!");
 /////////////////////////////////////////////////////////////////////
 function Basic_create_subset(input, first_d, inc_d) {
 	//create subset
-	output = input+"imageSeries_subset/";
+	output = input+"/imageSeries_subset/";
 	processFolder_subset(input, output, first_d, inc_d);
 	return output; 
 }
@@ -35,15 +40,15 @@ function Basic_create_subset(input, first_d, inc_d) {
 function Basic_bckg_from_subset(dir_subset, flat_file, dark_file) {
 	//run Basic
 	setBatchMode(true);
-	print("Initialising BaSiC.....");
+	print("STEP 2: Initialising BaSiC.....");
 	open(dir_subset);
 	basic_input=File.name;
-	print(File.name);
+	print(basic_input);
 
 	params_basic="processing_stack="+basic_input+
 				" flat-field=None dark-field=None shading_estimation=[Estimate shading profiles] shading_model=[Estimate both flat-field and dark-field] correction_options=[Compute shading only]";
 	run("BaSiC ", params_basic);
-	print("BaSiC koniec");
+	print("BaSiC is done");
 
 	//save and close Basic results
 	saveAndClose("Flat-field:"+basic_input, File.getParent(dir_subset), flat_file);
@@ -58,7 +63,7 @@ n_remove = 2;
 function Basic_correct(input, flat_file, dark_file, saving) {
 	setBatchMode(true);
 
-	output = input+"imageSeries_corBasic/";
+	output = input+"/imageSeries_corBasic/";
 	createFolder(output);
 	//correct all data
 	processFolder_convertUsingFiles(input, output, flat_file, dark_file, saving);
@@ -88,7 +93,7 @@ function processFolder_subset(input, output, first_d, inc_d) {
 	for (i = 0; i < list.length; i++) {
 		showProgress(i, list.length);
 		if(endsWith(list[i], suffix)) 
-			processFile_subset(input+list[i], output+"/", substring(list[i], 0, indexOf(list[i], suffix))+'_',
+			processFile_subset(input+'/'+list[i], output+"/", substring(list[i], 0, indexOf(list[i], suffix))+'_',
 			first_d, inc_d);
 	}
 	print("Subset created: "+ output);
@@ -122,15 +127,12 @@ function processFolder_convertUsingFiles(input, output, flat_file, dark_file, sa
 
 	for (i = 0; i < list.length; i++) {
 		if((endsWith(list[i], suffix))&&(endsWith(list[i], bigfile+suffix))!=1) {
-			print(list[i]);
 			
 			ileplikow++;
-			//namestring=substring(list[i], 0, indexOf(list[i], "tp"));
-			//indx=substring(list[i], indexOf(list[i], "_ch_0")+4, indexOf(list[i], suffix));
 			namestring=substring(list[i], 0, indexOf(list[i], "MMStack"));
 			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], suffix));
 			
-			//corrrect using files
+			//corrrect using files and close
 			corrected_name=processFile_correct(input+list[i], remove, n_remove, flat_file, dark_file);
 			close(list[i]);
 			
