@@ -20,11 +20,9 @@ print("\\Clear");
 #@ File (label = "Input directory containing raw data", style = "directory") input
 #@ String (label = "File suffix", value = ".ome.tif") suffix //change to multiple choice?
 
-print(input);
-
 output_subset=Basic_create_subset(input, 5, 15);
 
-//output_subset = input+"imageSeries_subset/";
+//output_subset = input+"\\imageSeries_subset\\";
 Basic_bckg_from_subset(output_subset, "flat_subset.tif", "dark_subset.tif");
 
 Basic_correct(input, "flat_subset.tif", "dark_subset.tif", saving);
@@ -63,8 +61,9 @@ n_remove = 2;
 function Basic_correct(input, flat_file, dark_file, saving) {
 	setBatchMode(true);
 
-	output = input+"/imageSeries_corBasic/";
+	output = input+"\\imageSeries_corBasic\\";
 	createFolder(output);
+
 	//correct all data
 	processFolder_convertUsingFiles(input, output, flat_file, dark_file, saving);
 }
@@ -113,11 +112,11 @@ function processFile_subset(input_file, output_subdir, output_file, first_d, inc
 
 
 function processFolder_convertUsingFiles(input, output, flat_file, dark_file, saving) {
-	print("Szukam plikow tla");
 	open(flat_file);
 	open(dark_file);
-	
-	remove=true;
+	print("'flat' and 'dark' files found");
+
+	remove=false;
 	n_remove=3;
 	
 	list = getFileList(input);
@@ -132,8 +131,8 @@ function processFolder_convertUsingFiles(input, output, flat_file, dark_file, sa
 			namestring=substring(list[i], 0, indexOf(list[i], "MMStack"));
 			indx=substring(list[i], indexOf(list[i], "_Pos")+4, indexOf(list[i], suffix));
 			
-			//corrrect using files and close
-			corrected_name=processFile_correct(input+list[i], remove, n_remove, flat_file, dark_file);
+			f=input+"\\"+list[i];
+			corrected_name=processFile_correct(f, remove, n_remove, flat_file, dark_file);
 			close(list[i]);
 			
 			//save
