@@ -9,8 +9,6 @@
  * 3. correction done on each original stack
  */
 
-//file parameters
-saving="tif"; //'series' or 'tif'
 
 //PRESS RUN
 
@@ -18,11 +16,12 @@ saving="tif"; //'series' or 'tif'
 print("\\Clear");
 
 #@ File (label = "Input directory containing raw data", style = "directory") input
-#@ String (label = "File suffix", value = ".ome.tif") suffix //change to multiple choice?
+#@ String (label = "File suffix", value = ".ome.tif") suffix 
+#@ String (label = "Saving format", choices={"stacks", "series"}, style="radioButtonHorizontal") saving 
 
-output_subset=Basic_create_subset(input, 5, 15);
+//output_subset=Basic_create_subset(input, 5, 15);
 
-//output_subset = input+"\\imageSeries_subset\\";
+output_subset = input+"\\imageSeries_subset\\";
 Basic_bckg_from_subset(output_subset, "flat_subset.tif", "dark_subset.tif");
 
 Basic_correct(input, "flat_subset.tif", "dark_subset.tif", saving);
@@ -139,7 +138,7 @@ function processFolder_convertUsingFiles(input, output, flat_file, dark_file, sa
 			print("Correction done, saving...");
 			if (saving=='series') {
 				processFile_save_toseries(corrected_name, output+namestring+"Pos"+indx+"/", namestring+"Pos"+indx+"_",0);
-			} else if (saving=='tif') {
+			} else if (saving=='stacks') {
 				processFile_save_totif(corrected_name, output, namestring+"Pos"+indx);
 			} else
 				exit("Wrong or missing SAVING parameter");
