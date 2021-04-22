@@ -45,12 +45,11 @@ function Basic_bckg_from_subset(dir_subset, flat_file, dark_file) {
 	params_basic="processing_stack="+basic_input+
 				" flat-field=None dark-field=None shading_estimation=[Estimate shading profiles] shading_model=[Estimate both flat-field and dark-field] correction_options=[Compute shading only]";
 	run("BaSiC ", params_basic);
-	print("BaSiC is done");
+	print("Determining flat and dark is done");
 
 	//save and close Basic results
 	saveAndClose("Flat-field:"+basic_input, File.getParent(dir_subset), flat_file);
 	saveAndClose("Dark-field:"+basic_input, File.getParent(dir_subset), dark_file);
-	print("Zapisywanie flat i dark koniec");
 }
 
 //remove first slices
