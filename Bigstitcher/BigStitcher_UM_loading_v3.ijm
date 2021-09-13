@@ -1,11 +1,11 @@
 /* 
- * ULTRAMICROSCOPE FILE 1/2
+ * v.3
  * LOADS ULTRAMICROSCOPE .ome.tif FILES INTO BIGSTITCHER
- * data will be resaved as HDF5 ready to open in Bigstitcher and stitch
- * results are saved in new folder "stitched_(highest.number)"
+ * data will be resaved as HDF5 ready to open in Bigstitcher in new folder "stitched_(highest.number)"
  *  
  * default settings:
  * - overlap 20%
+ * - tiles auto-detect
  * 
  * requires from the user: 
  * - output file name
@@ -17,7 +17,7 @@ prefix = getString("Define output file name:", "dataset");
 pth = getDirectory("Select input directory");
 print("Your path is: "+pth);
 
-// create array with subfolder names
+// FUN to create array with subfolder names
 function listsFolders(pth) {
 	list_all = getFileList(pth);
 	for (i=0; i<list_all.length; i++) {
@@ -27,19 +27,23 @@ function listsFolders(pth) {
 	list_dir = Array.slice(list_dir,1);
 	return list_dir;
 }
-
-// create array with subfolder names
-function listsFolders(pth) {
+// FUN to auto-detect tiles
+function detectTiles(pth) {
 	list_all = getFileList(pth);
 	for (i=0; i<list_all.length; i++) {
-		if (endsWith(list_all[i], "/"))
-			list_dir = Array.concat(list_dir, substring(list_all[i], 0, lengthOf(list_all[i])-1));
+		if (endsWith(list_all[i], ".ome.tif"))
+			tiles_row = Array.concat(tiles_row, substring(list_all[i], indexOf(list_all[i],"[")+1, indexOf(list_all[i],"[")+3));
+			tiles_col = Array.concat(tiles_col, substring(list_all[i], indexOf(list_all[i],"]")-2, indexOf(list_all[i],"]")));
 	}
-	list_dir = Array.slice(list_dir,1);
-	return list_dir;
+	tiles_row = Array.slice(tiles_row,1);
+	tiles_col = Array.slice(tiles_col,1);
+	Array.getStatistics(tiles_row, min, max_x, mean, std);
+	Array.getStatistics(tiles_col, min, max_y, mean, std);
+	tiles_max = newArray(max_x+1,max_y+1);
+	return tiles_max;
 }
 
-// create new subfolder for current stitching output
+// Create new subfolder for current stitching output
 pth_output = pth+"stitched_1";
 if (File.exists(pth_output) != 1) {
 	print("Creating: "+pth_output);
@@ -59,12 +63,14 @@ if (File.exists(pth_output) != 1) {
 }
 
 // set Bigstitcher settings and run
+tiles_max = detectTiles(pth);
+print("Note! ",tiles_max[0]," tiles in X and ",tiles_max[1]," tiles in Y were detected.");
 run("Define dataset ...",
 	"define_dataset=[Automatic Loader (Bioformats based)] "+
 	"project_filename="+prefix+".xml "+
 	"path="+pth+" exclude=10 bioformats_channels_are?=Channels "+
 	"pattern_0=Tiles pattern_1=Tiles move_tiles_to_grid_(per_angle)?=[Move Tile to Grid (Macro-scriptable)] "+
-	"grid_type=[Right & Down             ] tiles_x=2 tiles_y=2 tiles_z=1 overlap_x_(%)=20 overlap_y_(%)=20 overlap_z_(%)=20 "+
+	"grid_type=[Right & Down             ] tiles_x="+tiles_max[0]+" tiles_y="+tiles_max[1]+" tiles_z=1 overlap_x_(%)=20 overlap_y_(%)=20 overlap_z_(%)=20 "+
 	"keep_metadata_rotation how_to_load_images=[Re-save as multiresolution HDF5] "+
 	"dataset_save_path="+pth_output+
 	" timepoints_per_partition=1 setups_per_partition=0 use_deflate_compression "+
