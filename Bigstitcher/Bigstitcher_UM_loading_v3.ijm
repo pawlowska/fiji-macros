@@ -69,7 +69,7 @@ print("Note! ", tiles_max[0]," x ",tiles_max[1]," tiles matrix was detected.");
 run("Define dataset ...",
 	"define_dataset=[Automatic Loader (Bioformats based)] "+
 	"project_filename="+prefix+".xml "+
-	"path="+pth+" exclude=10 bioformats_channels_are?=Channels "+
+	"path="+pth+" exclude=1000 bioformats_channels_are?=Channels "+
 	"pattern_0=Tiles pattern_1=Tiles move_tiles_to_grid_(per_angle)?=[Move Tile to Grid (Macro-scriptable)] "+
 	"grid_type=[Right & Down             ] tiles_x="+tiles_max[0]+" tiles_y="+tiles_max[1]+" tiles_z=1 overlap_x_(%)=20 overlap_y_(%)=20 overlap_z_(%)=20 "+
 	"keep_metadata_rotation how_to_load_images=[Re-save as multiresolution HDF5] "+
