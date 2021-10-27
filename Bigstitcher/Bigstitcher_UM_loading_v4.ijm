@@ -1,7 +1,8 @@
 /* 
- * v.3
+ * v.4
  * LOADS ULTRAMICROSCOPE .ome.tif FILES INTO BIGSTITCHER
  * data will be resaved as HDF5 ready to open in Bigstitcher in new folder "stitched_(highest.number)"
+ * create results folder in the same paert folder as data folder
  *  
  * default settings:
  * - overlap 20%
@@ -10,12 +11,14 @@
  * requires from the user: 
  * - output file name
  * - selecting input directory
+ * - overlap value
  */
 
 // output file name and input directory
 prefix = getString("Define output file name:", "dataset");
 pth = getDirectory("Select input directory");
-print("Your path is: "+pth);
+print("Source path: "+pth);
+ovlap = getNumber("Overlap value (%):", "20");
 
 // FUN to create array with subfolder names
 function listsFolders(pth) {
@@ -45,7 +48,7 @@ function detectTiles(pth) {
 }
 
 // Create new subfolder for current stitching output
-pth_output = pth+"stitched_1";
+pth_output = File.getParent(pth)+File.separator+prefix+"_stitched_1";
 if (File.exists(pth_output) != 1) {
 	print("Creating: "+pth_output);
 	File.makeDirectory(pth_output);
@@ -58,12 +61,13 @@ if (File.exists(pth_output) != 1) {
 	dir_nums = Array.slice(dir_nums,1);
 	Array.getStatistics(dir_nums, min, max, mean, std);
 	new_num = max + 1;
-	pth_output = pth+"stitched_"+new_num;
+	pth_output = pth+File.separator+prefix+"_stitched_"+new_num;
 	print("Creating: "+pth_output);
 	File.makeDirectory(pth_output);
 }
 
 // set BigStitcher settings and run
+print("Output path: "+pth_output);
 tiles_max = detectTiles(pth);
 print("Note! ", tiles_max[1]," x ",tiles_max[0]," tiles matrix was detected.");
 run("Define dataset ...",
@@ -71,7 +75,7 @@ run("Define dataset ...",
 	"project_filename="+prefix+".xml "+
 	"path="+pth+" exclude=1000 bioformats_channels_are?=Channels "+
 	"pattern_0=Tiles pattern_1=Tiles move_tiles_to_grid_(per_angle)?=[Move Tile to Grid (Macro-scriptable)] "+
-	"grid_type=[Right & Down             ] tiles_x="+tiles_max[1]+" tiles_y="+tiles_max[0]+" tiles_z=1 overlap_x_(%)=20 overlap_y_(%)=20 overlap_z_(%)=20 "+
+	"grid_type=[Right & Down             ] tiles_x="+tiles_max[1]+" tiles_y="+tiles_max[0]+" tiles_z=1 overlap_x_(%)="+ovlap+" overlap_y_(%)="+ovlap+" overlap_z_(%)="+ovlap+" "+
 	"keep_metadata_rotation how_to_load_images=[Re-save as multiresolution HDF5] "+
 	"dataset_save_path="+pth_output+
 	" timepoints_per_partition=1 setups_per_partition=0 use_deflate_compression "+
