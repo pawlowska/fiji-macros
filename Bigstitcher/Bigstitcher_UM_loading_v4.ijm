@@ -19,6 +19,7 @@ prefix = getString("Define output file name:", "dataset");
 pth = getDirectory("Select input directory");
 print("Source path: "+pth);
 ovlap = getNumber("Overlap value (%):", "20");
+print("Overlap: "+ovlap);
 
 // FUN to create array with subfolder names
 function listsFolders(pth) {
