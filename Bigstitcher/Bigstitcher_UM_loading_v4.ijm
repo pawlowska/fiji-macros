@@ -3,12 +3,8 @@
  * LOADS ULTRAMICROSCOPE .ome.tif FILES INTO BIGSTITCHER
  * data will be resaved as HDF5 ready to open in Bigstitcher in new folder "stitched_(highest.number)"
  * create results folder in the same paert folder as data folder
- *  
- * default settings:
- * - overlap 20%
- * - tiles auto-detect
- * 
- * requires from the user: 
+ * tiles are auto-detected
+ * requires from the user: 
  * - output file name
  * - selecting input directory
  * - overlap value
