@@ -1,9 +1,12 @@
-//nie pamiętam czy to działa
+//nie działa
+pth = File.openDialog("Select input directory");
+print("Source file: "+pth);
 
-pth="E:/Dane/2018/2018_08/2018_08_01/alignment_R_start_2/dataset.xml";
-pth_out="E:/Dane/2018/2018_08/2018_08_01/alignment_R_start_2/.";
+d=File.getParent(pth);
+pth_out=d;
 
 run("Fuse dataset ...", 
 "select="+pth+
-" downsampling=1 pixel_type=[16-bit unsigned integer] interpolation=[Linear Interpolation] image=Virtual interest_points_for_non_rigid=[-= Disable Non-Rigid =-] preserve_original fused_image=[Save as (compressed) TIFF stacks] "+
+" downsampling=1 pixel_type=[16-bit unsigned integer] "+
+" image=Cached preserve_original fused_image= [Save as new XML Project (HDF5)]"+
 "output_file_directory="+pth_out);
