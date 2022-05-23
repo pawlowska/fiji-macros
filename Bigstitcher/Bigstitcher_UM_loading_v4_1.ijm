@@ -21,7 +21,8 @@ print("Overlap: "+ovlap);
 function listsFolders(pth) {
 	list_all = getFileList(pth);
 	for (i=0; i<list_all.length; i++) {
-		if (endsWith(list_all[i], "/"))
+		if (File.isDirectory(list_all[i])
+		//if (endsWith(list_all[i], "/"))
 			list_dir = Array.concat(list_dir, substring(list_all[i], 0, lengthOf(list_all[i])-1));
 	}
 	list_dir = Array.slice(list_dir,1);
