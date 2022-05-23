@@ -59,7 +59,7 @@ if (File.exists(pth_output) != 1) {
 	dir_nums = Array.slice(dir_nums,1);
 	Array.getStatistics(dir_nums, min, max, mean, std);
 	new_num = max + 1;
-	pth_output = pth+File.separator+prefix+"_stitched_"+new_num;
+	pth_output = File.getParent(pth)+File.separator+prefix+"_stitched_"+new_num;
 	print("Creating: "+pth_output);
 	File.makeDirectory(pth_output);
 }
