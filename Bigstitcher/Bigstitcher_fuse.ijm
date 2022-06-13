@@ -1,11 +1,10 @@
 //MP 24.05.2022
 //fuse stitched file to xml+hdf5
 
-pth = File.openDialog("Select input directory");
+pth = File.openDialog("Select xml of dataset to fuse");
 print("Source file: "+pth);
 
-d=File.getParent(pth);
-pth_out=d+File.separator;
+pth_out=File.getParent(pth)+File.separator;
 
 run("Fuse dataset ...", 
 "select="+pth+
