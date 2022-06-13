@@ -9,6 +9,7 @@
  * - selecting input directory
  * - overlap value
  */
+print("\\Clear");
 
 // output file name and input directory
 prefix = getString("Define output file name:", "dataset");
