@@ -8,6 +8,7 @@
  * - output file name
  * - selecting input directory
  * - overlap value
+ * Ubuntu! Mounting location: /run/user/1000/gvfs/smb-share:server=nas507-2955.local,share=lightsheet-dane/Ultramikroskop
  */
 print("\\Clear");
 
